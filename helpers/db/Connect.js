@@ -1,9 +1,7 @@
 import { MongoClient } from 'mongodb';
-import 'dotenv/config'
 
 export class Connect {
     static instanceConnect;
-    db;
     user;
     port;
     cluster;
@@ -53,10 +51,9 @@ export class Connect {
     }
 
     async #open() {
-        this.#url = `${this.#host}${this.user}:${this.#pass}@${this.cluster}:${this.port}`;
-        this.conexion = new MongoClient(this.#url);
         try {
-            this.db = this.conexion.db(this.#dbName);
+        this.#url = `${this.#host}${this.user}:${this.#pass}@${this.cluster}:${this.port}/${this.getDbName}`;
+        this.conexion = new MongoClient(this.#url);
         } catch(error){
             return {
                 error: `Error connecting to MongoDB`,

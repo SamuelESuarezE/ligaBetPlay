@@ -1,23 +1,23 @@
 import { Connect } from "../../helpers/db/Connect.js";
 
 
-export class Actividad extends Connect {
-  static instanceActividad;
+export class Comunicado extends Connect {
+  static instanceComunicado;
   db;
   collection;
 
   constructor() {
     super();
     this.db = this.conexion.db(this.getDbName);
-    this.collection = this.db.collection('actividad');
-    if (Actividad.instanceActividad) {
-      return Actividad.instanceActividad;
+    this.collection = this.db.collection('comunicado');
+    if (Comunicado.instanceComunicado) {
+      return Comunicado.instanceComunicado;
     }
-    Actividad.instanceActividad = this;
+    Comunicado.instanceComunicado = this;
     return this;
   }
 
-  async getAllActivities() {
+  async getAllAnnouncements() {
     await this.conexion.connect();
     const data = await this.collection.find().toArray();
     await this.conexion.close();

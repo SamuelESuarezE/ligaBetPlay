@@ -1,23 +1,22 @@
 import { Connect } from "../../helpers/db/Connect.js";
 
-
-export class Resultado extends Connect {
-  static instanceResultado;
+export class Convocatoria extends Connect {
+  static instanceConvocatoria;
   db;
   collection;
 
   constructor() {
     super();
     this.db = this.conexion.db(this.getDbName);
-    this.collection = this.db.collection('resultado');
-    if (Resultado.instanceResultado) {
-      return Resultado.instanceResultado;
+    this.collection = this.db.collection('convocatoria');
+    if (Convocatoria.instanceConvocatoria) {
+      return Convocatoria.instanceConvocatoria;
     }
-    Resultado.instanceResultado = this;
+    Convocatoria.instanceConvocatoria = this;
     return this;
   }
 
-  async getAllResults() {
+  async getAllAnnouncements() {
     await this.conexion.connect();
     const data = await this.collection.find().toArray();
     await this.conexion.close();

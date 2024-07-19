@@ -1,0 +1,92 @@
+import { Arbitro } from './js/model/Arbitro.js';
+import { Comunicado } from './js/model/Comunicado.js';
+import { Convocatoria } from './js/model/Convocatoria.js';
+import { Entrada } from './js/model/Entrada.js';
+import { Entrenador } from './js/model/Entrenador.js';
+import { Entrenamiento } from './js/model/Entrenamiento.js';
+import { Equipo } from './js/model/Equipo.js';
+import { Estadio } from './js/model/Estadio.js';
+import { Jugador } from './js/model/Jugador.js';
+import { Lesion } from './js/model/Lesion.js';
+import { Medio } from './js/model/Medio.js';
+import { Partido } from './js/model/Partido.js';
+import { Patrocinador } from './js/model/Patrocinador.js';
+import { Rendimiento } from './js/model/Rendimiento.js';
+import { Transferencia } from './js/model/Transferencia.js';
+
+let obj;
+
+// Tests Arbitro
+obj = new Arbitro();
+// console.log(await obj.getAllReferees());
+obj.destructor();
+
+// Testss Comunicado
+obj = new Comunicado();
+// console.log(await obj.getAllAnnouncements());
+obj.destructor();
+
+// Tests Convocatoria
+obj = new Convocatoria();
+// console.log(await obj.getAllAnnouncements());
+obj.destructor();
+
+// Tests Entrada
+obj = new Entrada();
+// console.log(await obj.getAllTickets());
+obj.destructor();
+
+// Tests Entrenador
+obj = new Entrenador();
+// console.log(await obj.getAllTrainers());
+obj.destructor();
+
+// Tests Entrenamiento
+obj = new Entrenamiento();
+// console.log(await obj.getAllTrainings());
+obj.destructor();
+
+// Tests Equipo
+obj = new Equipo();
+// console.log(await obj.getAllTeams());
+obj.destructor();
+
+// Tests Estadio
+obj = new Estadio();
+// console.log(await obj.getAllStadiums());
+obj.destructor();
+
+// Tests Jugador
+obj = new Jugador();
+// console.log(await obj.getAllPlayers());
+obj.destructor();
+
+// Tests Lesion
+obj = new Lesion();
+// console.log(await obj.getAllInjuries());
+obj.destructor();
+
+// Tests Medio
+obj = new Medio();
+// console.log(await obj.getAllMedias());
+obj.destructor();
+
+// Tests Partido
+obj = new Partido();
+// console.log(await obj.getAllMatchs());
+obj.destructor();
+
+// Tests Patrocinador
+obj = new Patrocinador();
+// console.log(await obj.getAllSponsors());
+obj.destructor();
+
+// Tests Rendimiento
+obj = new Rendimiento();
+// console.log(await obj.getAllPerformances());
+obj.destructor();
+
+// Tests Transferencia
+obj = new Transferencia();
+// console.log(await obj.getAllTransfers());
+obj.destructor();

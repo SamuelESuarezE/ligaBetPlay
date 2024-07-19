@@ -1,23 +1,23 @@
 import { Connect } from "../../helpers/db/Connect.js";
 
 
-export class Incidente extends Connect {
-  static instanceIncidente;
+export class Arbitro extends Connect {
+  static instanceReferee;
   db;
   collection;
 
   constructor() {
     super();
     this.db = this.conexion.db(this.getDbName);
-    this.collection = this.db.collection('incidente');
-    if (Incidente.instanceIncidente) {
-      return Incidente.instanceIncidente;
+    this.collection = this.db.collection('arbitro');
+    if (Arbitro.instanceReferee) {
+      return Arbitro.instanceReferee;
     }
-    Incidente.instanceIncidente = this;
+    Arbitro.instanceReferee = this;
     return this;
   }
 
-  async getAllIncidents() {
+  async getAllReferees() {
     await this.conexion.connect();
     const data = await this.collection.find().toArray();
     await this.conexion.close();
