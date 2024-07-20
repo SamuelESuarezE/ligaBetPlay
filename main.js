@@ -77,7 +77,11 @@ obj.destructor();
 
 // Tests Partido
 obj = new Partido();
+// * CASO DE USO 3: Programación de Partidos
 // console.log(await obj.getAllMatchs());
+// console.log(await obj.addMatch({ equipo_local_id: "669be6dae5247ae8f00ad1c0", equipo_visitante_id: "669a4add56ebba845724f2e1", fecha: "2024-07-25", hora: "20:00", estadio_id: "669a499e56ebba845724f2d7", arbitro_id: "6699bc620a398139ea78910d" }));
+// console.log(await obj.updateMatchById({_id: "669a56da56ebba845724f312", objUpdate: {fecha: "2024-08-02",hora: "20:00"}}))
+// console.log(await obj.deleteMatchById({_id: "669c86364d847a241493fb97"}))
 obj.destructor();
 
 // Tests Patrocinador
