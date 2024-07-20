@@ -1,5 +1,5 @@
 import { Connect } from "../../helpers/db/Connect.js";
-import { ObjectId } from "mongodb"; // agregamos ObjectId para poder validar,actualizar, eliminar, agregar por id de jugador
+import { ObjectId } from "mongodb"; // agregamos ObjectId para poder actualizar y eliminar por id de jugador
 
 export class Jugador extends Connect {
   static instanceJugador;
@@ -24,7 +24,7 @@ export class Jugador extends Connect {
     return data;
   }
   //caso de uso 2. Gestión de Jugadores
- //Actor: Administrador de la Liga, Equipo Técnico
+  //Actor: Administrador de la Liga, Equipo Técnico
 
   // funcion para agregar o crear un nuevo jugador en la base de datos
   async addPlayer(player) {
@@ -45,4 +45,39 @@ export class Jugador extends Connect {
     return result;
   }
 
+  // ahora creamos la funcion para actualizar un jugador creao previamente o ya creado anteriormente
+  async updatePlayer(id, updatedPlayer) {
+    await this.conexion.connect();
+    //en donde tambien realizamos la validacion del jugador que queremos actualizar por medio e su ObjectId para que si no existe no permita actualizar. 
+    const objectId = new ObjectId(id.$oid);
+    const existingPlayer = await this.collection.findOne({ _id: objectId });
+    //si no existe no dejara actualizar nada
+    if (!existingPlayer) {
+      await this.conexion.close();
+      throw new Error("El jugador no existe.");
+    }
+    // si existe por medio del ObjectId entonces mediante la funcion updateone y $set realizaremos la correcta actualizacion
+    const result = await this.collection.updateOne(
+      { _id: objectId },
+      { $set: updatedPlayer }
+    );
+    await this.conexion.close();
+    return result;
+  }
+  // con esta funcion el administraor o equipo tecnico podra tambien eliminar un jugador que exista.
+  async deletePlayer(id) {
+    await this.conexion.connect();
+    // validamos que el jugador exista por medio de su ObjectId
+    const objectId = new ObjectId(id.$oid);
+    const existingPlayer = await this.collection.findOne({ _id: objectId });
+    // si no existe no nos dejara eliminar nada
+    if (!existingPlayer) {
+      await this.conexion.close();
+      throw new Error("El jugador no existe.");
+    }
+    // si existe mediante deleteone y el id del jugador lo dejara eliminar correctamente.
+    const result = await this.collection.deleteOne({ _id: objectId });
+    await this.conexion.close();
+    return result;
+  }
 }
