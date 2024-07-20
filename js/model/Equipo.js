@@ -77,6 +77,14 @@ export class Equipo extends Connect {
     try {
       await this.conexion.connect();
 
+      const atributosPermitidos = ["nombre", "ciudad", "estado_id", "entrenador_id"]
+
+      for (let key of Object.keys(objUpdate)) {
+        if (!atributosPermitidos.includes(key)) {
+          throw new Error("Atributo no permitido: " + key)
+        }
+      }
+
       if (objUpdate.estadio_id) {
         const estadioExiste = await this.db.collection('estadio').findOne({_id: new ObjectId(objUpdate.estadio_id)});
         if (!estadioExiste) {
