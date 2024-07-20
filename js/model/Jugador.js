@@ -25,6 +25,7 @@ export class Jugador extends Connect {
   }
   //caso de uso 2. Gestión de Jugadores
   //Actor: Administrador de la Liga, Equipo Técnico
+  //Descripción: Permite registrar, editar y eliminar jugadores de los equipos.
 
   // funcion para agregar o crear un nuevo jugador en la base de datos
   async addPlayer(player) {
