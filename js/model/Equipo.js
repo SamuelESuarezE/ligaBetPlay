@@ -24,9 +24,6 @@ export class Equipo extends Connect {
     return data;
   }
 
-  // TODO: CRUD for teams
-  // addTeam(), updateTeam(), deleteTeam()
-
   async addTeam({nombre, ciudad, estadio_id, entrenador_id}) {
     try {
       await this.conexion.connect();
@@ -103,6 +100,31 @@ export class Equipo extends Connect {
       };
     } finally {
       await this.conexion.close();
+    }
+  }
+
+  async deleteTeamById({_id}) {
+    try {
+      await this.conexion.connect()
+
+      const deleteTeam = await this.collection.deleteOne({_id: new ObjectId(_id)})
+
+      if (deleteTeam.deletedCount == 0) {
+        throw new Error('El equipo especificado no existe: '+_id)
+      }
+
+      return {
+        success: true,
+        message: 'Equipo eliminado correctamente',
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error_type: error.name || 'Error',
+        error_message: error.message || 'Ha ocurrido un error desconocido',
+      }
+    } finally {
+      await this.conexion.close()
     }
   }
 }
