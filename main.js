@@ -50,7 +50,8 @@ obj.destructor();
 obj = new Equipo();
 // console.log(await obj.getAllTeams());
 // * CASO DE USO 1: Gestion de Equipos
-console.log(await obj.addTeam({nombre: "Atletico Campuslands", ciudad: "Floridablanca", estadio_id: "669a499e56ebba845724f2d6", entrenador_id: "6699bbfa0a398139ea789108"}));
+// console.log(await obj.addTeam({nombre: "Atletico Campuslands", ciudad: "Floridablanca", estadio_id: "669a499e56ebba845724f2d6", entrenador_id: "6699bbfa0a398139ea789108"}));
+console.log(await obj.updateTeamById({_id: "669a4add56ebba845724f2e4", objUpdate: {nombre: "Deportivo Cali"}}))
 obj.destructor();
 
 // Tests Estadio

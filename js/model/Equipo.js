@@ -66,4 +66,43 @@ export class Equipo extends Connect {
     }
   }
 
+  async updateTeamById({_id, objUpdate}) {
+    try {
+      await this.conexion.connect();
+
+      if (objUpdate.estadio_id) {
+        const estadioExiste = await this.db.collection('estadio').findOne({_id: new ObjectId(objUpdate.estadio_id)});
+        if (!estadioExiste) {
+          throw new Error("El estadio especificado no existe: " + objUpdate.estadio_id);
+        }
+      }
+
+      if (objUpdate.entrenador_id) {
+        const entrenadorExiste = await this.db.collection('entrenador').findOne({_id: new ObjectId(objUpdate.entrenador_id)});
+        if (!entrenadorExiste) {
+          throw new Error("El entrenador especificado no existe: " + objUpdate.entrenador_id);
+        }
+      }
+
+      const updateTeam = await this.collection.updateOne({_id: new ObjectId(_id)}, { $set: objUpdate });
+
+      if (updateTeam.matchedCount == 0) {
+        throw new Error("El equipo especificado no existe: " + _id)
+      } 
+
+      return {
+        success: true,
+        message: 'Equipo actualizado correctamente',
+        data: objUpdate,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error_type: error.name || 'Error',
+        error_message: error.message || 'Ha ocurrido un error desconocido',
+      };
+    } finally {
+      await this.conexion.close();
+    }
+  }
 }
