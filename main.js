@@ -233,9 +233,28 @@ let obj;
       partidoObj.destructor();
     }
   }
-  
-
+    // creamos la funcion para poder agregar un nuevo incidente
+    async function testAddIncident() {
+      const partidoObj = new Partido();
+      try {
+        const partidoId = { $oid: "669a56da56ebba845724f319" }; // que el id exista correctamente
+        // datos necesarios para la inserccion
+        const nuevoIncidente = {
+          descripcion: "Lesión de jugador",
+          minuto: 60
+        };
+        //finalmente agregamos el nuevo incidente
+        const resultado = await partidoObj.addIncident(partidoId, nuevoIncidente);
+        console.log(resultado);
+      } catch (error) {
+        console.error("Error al agregar incidente al partido:", error.message);
+      } finally {
+        partidoObj.destructor();
+      }
+    }
   // aca podemos descomentar las funciones que desea usar el arbitro o el administrador:
 
   // testAddMatchResult(); //agregar/actualizar resultados de un partido
   // testAddCard(); //agregar tarjetas a un partido
+  // testAddIncident() //agregar un incidente a un partido
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
