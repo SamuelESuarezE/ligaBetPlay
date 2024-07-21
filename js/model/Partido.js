@@ -81,4 +81,23 @@ export class Partido extends Connect {
     await this.conexion.close();
     return cardUpdate;
   }
+  //por ultimo creamos una funcion que le permita al arbitro o administrador poder agregar un incidente ocacionado en los partidos a nivel general
+  async addIncident(matchId, incident) {
+    await this.conexion.connect();
+    //verificamos que exista el partido para poder agregar el incidente
+    const objectId = new ObjectId(matchId.$oid);
+    const existingMatch = await this.collection.findOne({ _id: objectId });
+
+    if (!existingMatch) {
+      await this.conexion.close();
+      throw new Error("El partido no existe.");
+    }
+    // si existe mediante la funcion updateone y $push procedemos a crear un nuevo array de objetos especificando el incidente, esto en caso de que aun no allan incidentes
+    const incidentUpdate = await this.collection.updateOne(
+      { _id: objectId },
+      { $push: { incidentes: incident } }
+    );
+    await this.conexion.close();
+    return incidentUpdate;
+  }
 }
