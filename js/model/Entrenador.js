@@ -18,10 +18,18 @@ export class Entrenador extends Connect {
   }
 
   async getAllTrainers() {
-    await this.conexion.connect();
-    const data = await this.collection.find().toArray();
-    await this.conexion.close();
-    return data;
+    try {
+      await this.conexion.connect();
+      const data = await this.collection.find().toArray();
+      return data;
+    } catch (error) {
+      return {
+        success: false,
+        error_type: error.name || "Error",
+        error_message: error.message || "Ha ocurrido un error desconocido",
+      }
+    } finally {
+      await this.conexion.close();
+    }
   }
-
 }
