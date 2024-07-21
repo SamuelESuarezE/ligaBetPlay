@@ -40,7 +40,8 @@ obj.destructor();
 obj = new Entrenador();
 // * CASO DE USO 7: Gestión de Entrenadores
 // console.log(await obj.getAllTrainers());
-console.log(await obj.addTrainer({nombre: "Mariana Traslaviña", email: "mariana.traslavina@example.com", telefono: "+573244195352", experiencia: "10 años de experiencia como entrenador de clubes de alto rendimiento"}))
+// console.log(await obj.addTrainer({nombre: "Mariana Traslaviña", email: "mariana.traslavina@example.com", telefono: "+573244195352", experiencia: "10 años de experiencia como entrenador de clubes de alto rendimiento"}))
+console.log(await obj.updateTrainerById({_id: "6699bbfa0a398139ea789103", objUpdate: {email: "miguel.yolver@proton.me"}}))
 obj.destructor();
 
 // Tests Entrenamiento

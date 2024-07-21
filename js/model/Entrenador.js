@@ -1,5 +1,5 @@
+import { ObjectId } from "mongodb";
 import { Connect } from "../../helpers/db/Connect.js";
-
 
 export class Entrenador extends Connect {
   static instanceEntrenador;
@@ -65,6 +65,58 @@ export class Entrenador extends Connect {
       }
     } finally {
       await this.conexion.close();
+    }
+  }
+
+  async updateTrainerById({_id, objUpdate}) {
+    try {
+      await this.conexion.connect();
+
+      const atributosPermtidos = ["nombre", "email", "telefono", "experiencia" ]
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      const telefonoRegex = /^\+\S+$/
+
+      for (let [key, value] of Object.entries(objUpdate)) {
+        if (!atributosPermtidos.includes(key)) {
+          throw new Error(`Atributo no permitido: ${key}`);
+        }
+
+        switch (key) {
+          case 'email':
+            if (!emailRegex.test(value)) {
+              throw new Error('El email especificado no es valido: '+ value);
+            }
+            break;
+          case 'telefono':
+            if (!telefonoRegex.test(value)) {
+              throw new Error('El telefono especificado no es valido: '+ value);
+            }
+            break;
+          default:
+            break;
+        }
+      }
+
+      const trainerExiste = await this.collection.findOne({_id: new ObjectId(_id)})
+      if (!trainerExiste) {
+        throw new Error('El entrenador especificado no existe: '+ _id);
+      }
+
+      await this.collection.updateOne({_id: new ObjectId(_id)},{$set: objUpdate})
+
+      return {
+        success: true,
+        message: 'Entrenador actualizado correctamente',
+        data: objUpdate,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error_type: error.name || "Error",
+        error_message: error.message || "Ha ocurrido un error desconocido",
+      }
+    } finally {
+      await this.conexion.close()
     }
   }
 }
