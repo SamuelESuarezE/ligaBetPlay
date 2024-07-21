@@ -61,10 +61,10 @@ export class Partido extends Connect {
       await this.conexion.close();
       throw new Error("El partido no existe.");
     }
-    // si existe mediante la funcion updateone y $push estariamos creando un nuevo array de objetos que tendra los datos de esa tarjeta, esto puede hacerse cuantas veces sea necesario
+    // si existe mediante updateone y $push insertamos el nuevo array de objetos
     const cardUpdate = await this.collection.updateOne(
       { _id: objectId },
-      { $push: { tarjetas: card } }
+      { $push: { tarjetas: { ...card, jugador_id: new ObjectId(card.jugador_id.$oid) } } }
     );
     await this.conexion.close();
     return cardUpdate;

@@ -212,7 +212,30 @@ let obj;
       partidoObj.destructor();
     }
   }
+  // creamos la funcion para poder agregar tarjetas en un partido
+  async function testAddCard() {
+    const partidoObj = new Partido();
+    try {
+      // datos necesarios para la agregacion
+      const partidoId = { $oid: "669a56da56ebba845724f319" }; // verificamos que el id exista correctamente
+      const nuevaTarjeta = {
+        equipo: "local",
+        jugador_id: { $oid: "669a4c6056ebba845724f2f5" },// que el id sea correcto
+        color: "roja",
+        minuto: 80
+      };
+      // finalmente agregamos la nueva tarjeta
+      const resultado = await partidoObj.addCard(partidoId, nuevaTarjeta);
+      console.log(resultado);
+    } catch (error) {
+      console.error("Error al agregar tarjeta al partido:", error.message);
+    } finally {
+      partidoObj.destructor();
+    }
+  }
+  
 
   // aca podemos descomentar las funciones que desea usar el arbitro o el administrador:
 
-  testAddMatchResult(); //agregar/actualizar resultados de un partido
+  // testAddMatchResult(); //agregar/actualizar resultados de un partido
+  // testAddCard(); //agregar tarjetas a un partido
