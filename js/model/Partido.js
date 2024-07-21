@@ -43,4 +43,23 @@ export class Partido extends Connect {
     await this.conexion.close();
     return resultUpdate;
   }
+  // si el administrador o el arbitro deciden que es necesario eliminar los resultados de un partido creamos esta funcion
+  async deleteMatchResult(matchId) {
+    await this.conexion.connect();
+    // verificamos que el id del partido exista
+    const objectId = new ObjectId(matchId.$oid);
+    const existingMatch = await this.collection.findOne({ _id: objectId });
+
+    if (!existingMatch) {
+      await this.conexion.close();
+      throw new Error("El partido no existe.");
+    }
+    //si existe mediante updateone y $unset procedemos a eliminar los datos existentes. Esto es poco probable pero permite una mejor administracion de la base de datos 
+    const resultUpdate = await this.collection.updateOne(
+      { _id: objectId },
+      { $unset: { resultado: "" } } // dejamos en "" para dejar un dato vacio
+    );
+    await this.conexion.close();
+    return resultUpdate;
+  }
 }
