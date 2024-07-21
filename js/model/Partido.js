@@ -48,6 +48,10 @@ export class Partido extends Connect {
                 throw new Error("El equipo visitante especificado no existe: " + equipo_visitante_id);
             }
 
+            if (equipo_local_id == equipo_visitante_id) {
+                throw new Error("El equipo local y visitante especificados son el mismo: " + equipo_visitante_id);
+            }
+
             const estadioExiste = await this.db.collection("estadio").findOne({_id: new ObjectId(estadio_id)});
             if (!estadioExiste) {
                 throw new Error("El estadio especificado no existe: " + estadio_id);
@@ -126,6 +130,8 @@ export class Partido extends Connect {
                 const equipoLocalExiste = await this.db.collection("equipo").findOne({_id: newObjUpdate.equipo_local_id});
                 if (!equipoLocalExiste) {
                     throw new Error("El equipo local especificado no existe: " + objUpdate.equipo_local_id);
+                } else if (newObjUpdate.equipo_local_id == partidoExiste.equipo_visitante_id) {
+                    throw new Error("El equipo local especificado es el mismo equipo visitante ya registrado en el partido: " + partidoExiste.equipo_visitante_id);
                 }
             }
 
@@ -133,6 +139,8 @@ export class Partido extends Connect {
                 const equipoVisitanteExiste = await this.db.collection("equipo").findOne({_id: newObjUpdate.equipo_visitante_id});
                 if (!equipoVisitanteExiste) {
                     throw new Error("El equipo visitante especificado no existe: " + objUpdate.equipo_visitante_id);
+                } else if (newObjUpdate.equipo_visitante_id == partidoExiste.equipo_local_id) {
+                    throw new Error("El equipo visitante especificado es el mismo equipo local ya registrado en el partido: " + partidoExiste.equipo_local_id);
                 }
             }
 
@@ -164,6 +172,20 @@ export class Partido extends Connect {
                 message: "Partido actualizado correctamente",
                 data: objUpdate,
             }
+        } catch (error) {
+            return {
+                success: false,
+                error_type: error.name || "Error",
+                error_message: error.message || "Ha ocurrido un error desconocido",
+            };
+        } finally {
+            await this.conexion.close();
+        }
+    }
+
+    async deleteMatchById(_id) {
+        try {
+            await this.conexion.connect();
         } catch (error) {
             return {
                 success: false,
