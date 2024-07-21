@@ -121,7 +121,7 @@ export class Equipo extends Connect {
     try {
       await this.conexion.connect();
 
-      const atributosPermitidos = ["nombre", "ciudad", "estado_id", "entrenador_id"]
+      const atributosPermitidos = ["nombre", "ciudad", "estadio_id", "entrenador_id"]
 
       for (let key of Object.keys(objUpdate)) {
         if (!atributosPermitidos.includes(key)) {
@@ -129,21 +129,30 @@ export class Equipo extends Connect {
         }
       }
 
-      if (objUpdate.estadio_id) {
-        const estadioExiste = await this.db.collection('estadio').findOne({_id: new ObjectId(objUpdate.estadio_id)});
+      const newObjUpdate = {};
+      for(let [key, value] of Object.entries(objUpdate)) {
+          if (key.slice(-3) === "_id") {
+            newObjUpdate[key] = new ObjectId(value);
+          } else {
+              newObjUpdate[key] = value;
+          } 
+      }
+
+      if (newObjUpdate.estadio_id) {
+        const estadioExiste = await this.db.collection('estadio').findOne({_id: newObjUpdate.estadio_id});
         if (!estadioExiste) {
           throw new Error("El estadio especificado no existe: " + objUpdate.estadio_id);
         }
       }
 
-      if (objUpdate.entrenador_id) {
-        const entrenadorExiste = await this.db.collection('entrenador').findOne({_id: new ObjectId(objUpdate.entrenador_id)});
+      if (newObjUpdate.entrenador_id) {
+        const entrenadorExiste = await this.db.collection('entrenador').findOne({_id: newObjUpdate.entrenador_id});
         if (!entrenadorExiste) {
           throw new Error("El entrenador especificado no existe: " + objUpdate.entrenador_id);
         }
       }
 
-      const updateTeam = await this.collection.updateOne({_id: new ObjectId(_id)}, { $set: objUpdate });
+      const updateTeam = await this.collection.updateOne({_id: new ObjectId(_id)}, { $set: newObjUpdate });
 
       if (updateTeam.matchedCount == 0) {
         throw new Error("El equipo especificado no existe: " + _id)
