@@ -17,6 +17,13 @@ export class Partido extends Connect {
         return this;
     }
 
+    /**
+     * Obtiene todos los registros de partidos de la base de datos.
+     *
+     * @returns {Promise<Array>} Una promesa que se resuelve a un array de registros de partidos.
+     * Si se produce un error durante la operación de base de datos, la promesa se resolverá a un objeto con
+     * una propiedad 'success' establecida en false y propiedades 'error_type' y 'error_message' que proporcionan detalles sobre el error.
+     */
     async getAllMatchs() {
         try {
             await this.conexion.connect();
@@ -33,6 +40,21 @@ export class Partido extends Connect {
         }
     }
 
+    /**
+     * Añade un nuevo partido a la base de datos.
+     *
+     * @param {Object} params - Parámetros necesarios para añadir un partido.
+     * @param {string} params.equipo_local_id - ID del equipo local.
+     * @param {string} params.equipo_visitante_id - ID del equipo visitante.
+     * @param {string} params.fecha - Fecha del partido en formato ISO 8601 "YYYY-MM-DD".
+     * @param {string} params.hora - Hora del partido en formato "HH:mm".
+     * @param {string} params.estadio_id - ID del estadio donde se jugará el partido.
+     * @param {string} params.arbitro_id - ID del árbitro que gestionará el partido.
+     *
+     * @returns {Promise<Object>} Una promesa que se resuelve a un objeto con propiedades 'success', 'message' y 'data'.
+     * Si se produce un error durante la operación de base de datos, la promesa se resolverá a un objeto con
+     * propiedades 'success' establecida en false y propiedades 'error_type' y 'error_message' que proporcionan detalles sobre el error.
+     */
     async addMatch({equipo_local_id, equipo_visitante_id, fecha, hora, estadio_id, arbitro_id}) {
         try {
             await this.conexion.connect();
@@ -98,6 +120,17 @@ export class Partido extends Connect {
         }
     }
 
+    /**
+     * Actualiza un partido existente en la base de datos.
+     *
+     * @param {Object} params - Parámetros necesarios para actualizar un partido.
+     * @param {string} params._id - ID del partido que se va a actualizar.
+     * @param {Object} params.objUpdate - Objeto con las propiedades que se van a actualizar.
+     *
+     * @returns {Promise<Object>} Una promesa que se resuelve a un objeto con propiedades 'success', 'message' y 'data'.
+     * Si se produce un error durante la operación de base de datos, la promesa se resolverá a un objeto con
+     * propiedades 'success' establecida en false y propiedades 'error_type' y 'error_message' que proporcionan detalles sobre el error.
+     */
     async updateMatchById({_id, objUpdate}) {
         try {
             await this.conexion.connect();
@@ -183,6 +216,16 @@ export class Partido extends Connect {
         }
     }
 
+    /**
+     * Elimina un partido existente de la base de datos por su ID.
+     *
+     * @param {Object} params - Parámetros necesarios para eliminar un partido.
+     * @param {string} params._id - ID del partido que se va a eliminar.
+     *
+     * @returns {Promise<Object>} Una promesa que se resuelve a un objeto con propiedades 'success', 'message' y 'data'.
+     * Si se produce un error durante la operación de base de datos, la promesa se resolverá a un objeto con
+     * propiedades 'success' establecida en false y propiedades 'error_type' y 'error_message' que proporcionan detalles sobre el error.
+     */
     async deleteMatchById({_id}) {
         try {
             await this.conexion.connect();
