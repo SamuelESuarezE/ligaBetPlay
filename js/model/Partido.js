@@ -183,9 +183,20 @@ export class Partido extends Connect {
         }
     }
 
-    async deleteMatchById(_id) {
+    async deleteMatchById({_id}) {
         try {
             await this.conexion.connect();
+
+            const deleteMatch = await this.collection.deleteOne({_id: new ObjectId(_id)})
+
+            if (deleteMatch.deletedCount == 0) {
+              throw new Error('El partido especificado no existe: '+_id)
+            }
+      
+            return {
+              success: true,
+              message: 'Partido eliminado correctamente',
+            }
         } catch (error) {
             return {
                 success: false,
