@@ -84,12 +84,29 @@ export class Partido extends Connect {
                 throw new Error("El arbitro especificado no existe: " + arbitro_id);
             }
 
-            const schedulingConflict = await this.collection.findOne({fecha: new Date(fecha), hora: hora, estadio_id: new ObjectId(estadio_id)});
+            // * Validaciones de fecha y hora
+            const fechaRegex = /^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
+            if (fechaRegex.test(fecha)) {
+              fecha = new Date(fecha)
+            } else {
+              throw new Error("La fecha especificada no es válida. Debe tener el formato YYYY-MM-DD: " + fecha);
+            }
+
+            const horaRegex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/
+
+            if (!horaRegex.test(hora)) {
+              throw new Error("La hora especificada no es válida. Debe tener el formato HH:mm: " + hora);
+            }
+
+            const schedulingConflict = await this.collection.findOne({fecha: fecha, hora: hora, estadio_id: new ObjectId(estadio_id)});
 
             if (schedulingConflict) {
                 throw new Error("Ya hay un partido programado en esa fecha y hora en el estadio especificado");
             }
 
+            // ! Se incluye un resultado por definir y goles, tarjetas e incidentes vacios para facilitar
+            // ! su gestion en un futuro
             const newMatch = {
                 equipo_local_id: new ObjectId(equipo_local_id),
                 equipo_visitante_id: new ObjectId(equipo_visitante_id),
@@ -97,7 +114,15 @@ export class Partido extends Connect {
                 hora,
                 estadio_id: new ObjectId(estadio_id),
                 arbitro_id: new ObjectId(arbitro_id),
-                estado: "programado"
+                estado: "programado",
+                resultado: {
+                  goles_local: 0,
+                  goles_visitante: 0,
+                  resultado_final: "por definir"
+                },
+                goles: [],
+                tarjetas: [],
+                incidentes: [],
             }
 
 
@@ -147,23 +172,47 @@ export class Partido extends Connect {
                     throw new Error("Atributo no permitido: " + key);
                 }
             }
-            
+
+            // ! Nuevo error, no puede ser el mismo equipo como local y visitante
+            if (objUpdate.equipo_local_id == objUpdate.equipo_visitante_id) {
+              throw new Error("Los equipos locales y visitantes no pueden ser iguales: " + objUpdate.equipo_visitante_id);
+            }
+
+            // * Validaciones de fecha y hora
+            const fechaRegex = /^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+            const horaRegex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/
+
             const newObjUpdate = {};
+            
             for(let [key, value] of Object.entries(objUpdate)) {
+                // Si es una ID, hace una instancia de ObjectId
                 if (key.slice(-3) === "_id") {
                   newObjUpdate[key] = new ObjectId(value);
+                // Si es una fecha, y pasa el regex hace una instancia de Date
                 } else if (key == "fecha") {
-                    newObjUpdate[key] = new Date(value);
+                    if (fechaRegex.test(value)) {
+                      newObjUpdate[key] = new Date(value)
+                    } else {
+                      throw new Error("La fecha especificada no es válida. Debe tener el formato YYYY-MM-DD: " + value);
+                    }
+                // Si es una hora y pasa el regex lo agrega al newObjUpdate
+                } else if (key == "hora") {
+                    if (horaRegex.test(value)) {
+                      newObjUpdate[key] = value;
+                    } else {
+                      throw new Error("La hora especificada no es válida. Debe tener el formato HH:mm: " + value);
+                    }
+                // Si no es ni _id, ni fecha ni hora entonces lo agrega normal
                 } else {
-                    newObjUpdate[key] = value;
-                } 
+                  newObjUpdate[key] = value;
+                }
             }
 
             if (newObjUpdate.equipo_local_id) {
                 const equipoLocalExiste = await this.db.collection("equipo").findOne({_id: newObjUpdate.equipo_local_id});
                 if (!equipoLocalExiste) {
                     throw new Error("El equipo local especificado no existe: " + objUpdate.equipo_local_id);
-                } else if (newObjUpdate.equipo_local_id == partidoExiste.equipo_visitante_id) {
+                } else if (newObjUpdate.equipo_local_id.toString() == partidoExiste.equipo_visitante_id.toString()) {
                     throw new Error("El equipo local especificado es el mismo equipo visitante ya registrado en el partido: " + partidoExiste.equipo_visitante_id);
                 }
             }
@@ -172,7 +221,7 @@ export class Partido extends Connect {
                 const equipoVisitanteExiste = await this.db.collection("equipo").findOne({_id: newObjUpdate.equipo_visitante_id});
                 if (!equipoVisitanteExiste) {
                     throw new Error("El equipo visitante especificado no existe: " + objUpdate.equipo_visitante_id);
-                } else if (newObjUpdate.equipo_visitante_id == partidoExiste.equipo_local_id) {
+                } else if (newObjUpdate.equipo_visitante_id.toString() == partidoExiste.equipo_local_id.toString()) {
                     throw new Error("El equipo visitante especificado es el mismo equipo local ya registrado en el partido: " + partidoExiste.equipo_local_id);
                 }
             }
@@ -192,7 +241,7 @@ export class Partido extends Connect {
             }
 
             if (newObjUpdate.fecha || newObjUpdate.hora){
-                const schedulingConflict = await this.collection.findOne({fecha: new Date(newObjUpdate.fecha) || partidoExiste.fecha, hora: newObjUpdate.hora || partidoExiste.hora, estadio_id: newObjUpdate.estadio_id || partidoExiste.estadio_id});
+                const schedulingConflict = await this.collection.findOne({fecha: newObjUpdate.fecha || partidoExiste.fecha, hora: newObjUpdate.hora || partidoExiste.hora, estadio_id: newObjUpdate.estadio_id || partidoExiste.estadio_id});
                 if (schedulingConflict) {
                     throw new Error("Ya hay un partido programado en esa fecha y hora en el estadio especificado");
                 }
