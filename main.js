@@ -258,3 +258,82 @@ let obj;
   // testAddCard(); //agregar tarjetas a un partido
   // testAddIncident() //agregar un incidente a un partido
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
+
+
+
+
+
+
+
+
+
+
+  
+
+  // Caso de uso 6. Gestión de Noticias y Comunicados ////////////////////////////////////////////////////////////////////////////////////////7
+  // Actor: Administrador de la Liga, Periodista
+  // Descripción: Permite registrar, editar y eliminar noticias y comunicados.
+
+
+  // creamos la funcion que nos permitira crear un nuevo comunicao
+  async function testAddAnnouncement() {
+    obj = new Comunicado();
+    try {
+      //datos importantes para la creacion del comunicado
+      const nuevoComunicado = {
+        titulo: "Nueva Noticia",
+        contenido: "Contenido de la nueva noticia.",
+        fecha_publicacion: "2024-07-20",
+        destinatarios: "Aficionados"
+      };
+      //si todo esta bien lo agregamos:
+      const resultado = await obj.addAnnouncement(nuevoComunicado);
+      console.log(resultado);
+    } catch (error) {
+      console.error("Error al agregar comunicado:", error.message);
+    } finally {
+      obj.destructor();
+    }
+  }
+  // luego una funcion para que el administrador o el periodista puedan actualizar ese comunicado creado o cualquiero otro
+  async function testUpdateAnnouncement() {
+    obj = new Comunicado();
+    try {
+      // datos importantes:
+      const comunicadoId = { $oid: "669d6f842c3ccefddace270a" }; // que exista ese sino no servira 
+      const comunicadoActualizado = {
+        // estos datos serian a gusto del admin o periodista para cambiarlos
+        titulo: "Actualización de Noticia",
+        contenido: "Contenido actualizado de la noticia.",
+        fecha_publicacion: "2024-07-21",
+        destinatarios: "Equipos"
+      };
+      // si todo sale bien podra actualizarlos
+      const resultado = await obj.updateAnnouncement(comunicadoId, comunicadoActualizado);
+      console.log(resultado);
+    } catch (error) {
+      console.error("Error al actualizar comunicado:", error.message);
+    } finally {
+      obj.destructor();
+    }
+  }
+  // por ultimo una funcion que nos permitira eliminar los comunicados que existan
+  async function testDeleteAnnouncement() {
+    obj = new Comunicado();
+    try {
+      const comunicadoEliminarId = { $oid: "669d6f842c3ccefddace270a" }; // tiene que existir este id
+      const resultado = await obj.deleteAnnouncement(comunicadoEliminarId);
+      console.log(resultado);
+    } catch (error) {
+      //si sale todo bien le permitira elimanr al periodista o amdin encargado
+      console.error("Error al eliminar comunicado:", error.message);
+    } finally {
+      obj.destructor();
+    }
+  }
+  
+  // descomentar la funcion para utilizarla:
+  // testAddAnnouncement(); // agregar un comunicado
+  // testUpdateAnnouncement(); // actualizar un comunicado
+  // testDeleteAnnouncement(); // eliminar un comunicado
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
