@@ -58,6 +58,12 @@ export class Partido extends Connect {
                 throw new Error("El arbitro especificado no existe: " + arbitro_id);
             }
 
+            const schedulingConflict = await this.collection.findOne({fecha: new Date(fecha), hora: hora, estadio_id: new ObjectId(estadio_id)});
+
+            if (schedulingConflict) {
+                throw new Error("Ya hay un partido programado en esa fecha y hora en el estadio especificado");
+            }
+
             const newMatch = {
                 equipo_local_id: new ObjectId(equipo_local_id),
                 equipo_visitante_id: new ObjectId(equipo_visitante_id),
@@ -67,6 +73,8 @@ export class Partido extends Connect {
                 arbitro_id: new ObjectId(arbitro_id),
                 estado: "programado"
             }
+
+
 
             await this.collection.insertOne(newMatch);
 
@@ -90,6 +98,11 @@ export class Partido extends Connect {
         try {
             await this.conexion.connect();
             
+            const partidoExiste = await this.collection.findOne({_id: new ObjectId(_id)});
+            if (!partidoExiste) {
+                throw new Error("El partido especificado no existe: " + _id);
+            }
+
             const atributosPermitidos = ["equipo_local_id", "equipo_visitante_id", "fecha", "hora", "estadio_id", "arbitro_id", "estado"];
 
             for (let key of Object.keys(objUpdate)) {
@@ -102,6 +115,8 @@ export class Partido extends Connect {
             for(let [key, value] of Object.entries(objUpdate)) {
                 if (key.slice(-3) === "_id") {
                   newObjUpdate[key] = new ObjectId(value);
+                } else if (key == "fecha") {
+                    newObjUpdate[key] = new Date(value);
                 } else {
                     newObjUpdate[key] = value;
                 } 
@@ -135,11 +150,14 @@ export class Partido extends Connect {
                 }
             }
 
-            const newPartido = await this.collection.updateOne({_id: new ObjectId(_id)}, { $set: newObjUpdate });
-            
-            if (newPartido.matchedCount === 0) {
-                throw new Error("El partido especificado no existe: " + _id);
+            if (newObjUpdate.fecha || newObjUpdate.hora){
+                const schedulingConflict = await this.collection.findOne({fecha: new Date(newObjUpdate.fecha) || partidoExiste.fecha, hora: newObjUpdate.hora || partidoExiste.hora, estadio_id: newObjUpdate.estadio_id || partidoExiste.estadio_id});
+                if (schedulingConflict) {
+                    throw new Error("Ya hay un partido programado en esa fecha y hora en el estadio especificado");
+                }
             }
+
+            await this.collection.updateOne({_id: new ObjectId(_id)}, { $set: newObjUpdate });
 
             return {
                 success: true,
