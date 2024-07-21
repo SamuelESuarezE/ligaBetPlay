@@ -96,7 +96,7 @@ let obj;
 
 
 
-  //caso de uso 2. Gestión de Jugadores
+  //caso de uso 2. Gestión de Jugadores ///////////////////////////////////////////////////////////////////////////////////////////////////////
   //Actor: Administrador de la Liga, Equipo Técnico
   //Descripción: Permite registrar, editar y eliminar jugadores de los equipos.
 
@@ -173,6 +173,46 @@ let obj;
   }
   // y aca finalmente podemos descomentar las funciones dependiendo de cual requiera usar el administrador o el equipo tecnico y usar: npm run dev en la consola:
 
-  // testAddPlayer();
-  // testUpdatePlayer();
-  // testDeletePlayer();
+  // testAddPlayer(); // agregar un jugador
+  // testUpdatePlayer(); // actualizar datos del jugador
+  // testDeletePlayer(); // eliminar un jugador
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+  
+  // Caso de uso 4. Registro de Resultados /////////////////////////////////////////////////////////////////////////////////////////
+  // Actor: Árbitro, Administrador de la Liga
+  // Descripción: Permite registrar los resultados de los partidos.
+
+
+  // creamos la funcion para que el arbitro o administrador puedan realizar la correcta actualizacion o agregacion de resultados a un partido
+  async function testAddMatchResult() {
+    const partidoObj = new Partido();
+    try {
+      const partidoId = { $oid: "669a56da56ebba845724f318" }; // importante que el id exista sino saldra error
+      // datos requeridos para la actualizacion:
+      const nuevoResultado = {
+        goles_local: 0,
+        goles_visitante: 0,
+        resultado_final: "empate" // aca solo se permiten estos datos: victoria_local, victoria_visitante, empate, por definir, cancelado (si no se pone tal cual saldra error de documento)
+      };
+      // y agregamos los resultados :
+      const resultado = await partidoObj.addMatchResult(partidoId, nuevoResultado);
+      console.log(resultado);
+    } catch (error) {
+      console.error("Error al agregar resultado del partido:", error.message);
+    } finally {
+      partidoObj.destructor();
+    }
+  }
+
+  // aca podemos descomentar las funciones que desea usar el arbitro o el administrador:
+
+  testAddMatchResult(); //agregar/actualizar resultados de un partido

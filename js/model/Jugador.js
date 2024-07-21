@@ -23,7 +23,7 @@ export class Jugador extends Connect {
     await this.conexion.close();
     return data;
   }
-  //caso de uso 2. Gestión de Jugadores
+  //caso de uso 2. Gestión de Jugadores /////////////////////////////////////////////////////////////////////////////////////////77
   //Actor: Administrador de la Liga, Equipo Técnico
   //Descripción: Permite registrar, editar y eliminar jugadores de los equipos.
 
@@ -81,4 +81,5 @@ export class Jugador extends Connect {
     await this.conexion.close();
     return result;
   }
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
