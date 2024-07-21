@@ -41,7 +41,8 @@ obj = new Entrenador();
 // * CASO DE USO 7: Gestión de Entrenadores
 // console.log(await obj.getAllTrainers());
 // console.log(await obj.addTrainer({nombre: "Mariana Traslaviña", email: "mariana.traslavina@example.com", telefono: "+573244195352", experiencia: "10 años de experiencia como entrenador de clubes de alto rendimiento"}))
-console.log(await obj.updateTrainerById({_id: "6699bbfa0a398139ea789103", objUpdate: {email: "miguel.yolver@proton.me"}}))
+// console.log(await obj.updateTrainerById({_id: "6699bbfa0a398139ea789103", objUpdate: {email: "miguel.yolver@proton.me"}}))
+console.log(await obj.deleteTrainerById({_id: "669d54aaebd4389e51fd3c5d"}))
 obj.destructor();
 
 // Tests Entrenamiento
@@ -53,7 +54,7 @@ obj.destructor();
 obj = new Equipo();
 // * CASO DE USO 1: Gestion de Equipos
 // console.log(await obj.getAllTeams());
-// console.log(await obj.addTeam({nombre: "Atletico Campuslands", ciudad: "Floridablanca", estadio_id: "669a499e56ebba845724f2d6", entrenador_id: "6699bbfa0a398139ea789108"}));
+// console.log(await obj.addTeam({nombre: "Atletico Campuslands", ciudad: "Floridablanca", estadio_id: "669a499e56ebba845724f2d6", entrenador_id: "669d5354c2f98c89f4f7a41d"}));
 // console.log(await obj.updateTeamById({_id: "669a4add56ebba845724f2e4", objUpdate: {nombre1: "Deportivo Cali"}}))
 // console.log(await obj.deleteTeamById({_id: "669bd3ac944f05d20e72ad6d"}))
 obj.destructor();

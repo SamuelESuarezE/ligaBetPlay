@@ -119,4 +119,34 @@ export class Entrenador extends Connect {
       await this.conexion.close()
     }
   }
+
+  async deleteTrainerById({_id}) {
+    try {
+      await this.conexion.connect();
+
+      const trainerExiste = await this.collection.findOne({_id: new ObjectId(_id)})
+      if (!trainerExiste) {
+        throw new Error('El entrenador especificado no existe: '+ _id);
+      }
+
+      await this.collection.deleteOne({_id: new ObjectId(_id)})
+
+      // ! Al eliminar un trainer tambien se elimina su ID del equipo que haya tenido asignado
+      await this.db.collection("equipo").updateOne({entrenador_id: new ObjectId(_id)}, {$set: {entrenador_id: null}})
+      
+      return {
+        success: true,
+        message: 'Entrenador eliminado correctamente',
+        data: trainerExiste
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error_type: error.name || "Error",
+        error_message: error.message || "Ha ocurrido un error desconocido",
+      }
+    } finally {
+      await this.conexion.close()
+    }
+  }
 }
