@@ -17,6 +17,12 @@ export class Equipo extends Connect {
     return this;
   }
 
+  /**
+  * Obtiene todos los equipos de la base de datos.
+  *
+  * @returns {Promise<Array|Object>} Un array de objetos de equipo si la operación es exitosa, o un objeto de error si falla.
+  * @throws Lanza un error si hay un problema al conectarse a la base de datos o ejecutar la consulta.
+  */
   async getAllTeams() {
     try {
       await this.conexion.connect();
@@ -34,6 +40,24 @@ export class Equipo extends Connect {
 
   }
 
+    /** 
+    * Añade un nuevo equipo a la base de datos.
+    *
+    * @param {Object} params - Parámetros necesarios para añadir un nuevo equipo.
+    * @param {string} params.nombre - Nombre del equipo.
+    * @param {string} params.ciudad - Ciudad donde se encuentra el equipo.
+    * @param {string} params.estadio_id - ID del estadio donde juega el equipo.
+    * @param {string} params.entrenador_id - ID del entrenador del equipo.
+    *
+    * @returns {Promise<Object>} - Un objeto con información sobre la operación realizada.
+    *  - success: Indica si la operación fue exitosa (true) o no (false).
+    *  - message: Mensaje de confirmación o error.
+    *  - data: Datos del equipo añadido (solo si success es true).
+    *  - error_type: Tipo de error (solo si success es false).
+    *  - error_message: Mensaje de error detallado (solo si success es false).
+    *
+    * @throws {Error} - Lanza un error si el estadio o entrenador especificados no existen.
+  */
   async addTeam({nombre, ciudad, estadio_id, entrenador_id}) {
     try {
       await this.conexion.connect();
@@ -73,6 +97,26 @@ export class Equipo extends Connect {
     }
   }
 
+    /**
+   * Actualiza un equipo en la base de datos por su ID.
+   *
+   * @param {Object} params - Parámetros necesarios para actualizar un equipo.
+   * @param {string} params._id - ID del equipo a actualizar.
+   * @param {Object} params.objUpdate - Objeto con los campos a actualizar.
+   * @param {string} [params.objUpdate.nombre] - Nuevo nombre del equipo.
+   * @param {string} [params.objUpdate.ciudad] - Nueva ciudad del equipo.
+   * @param {string} [params.objUpdate.estadio_id] - Nuevo ID del estadio donde juega el equipo.
+   * @param {string} [params.objUpdate.entrenador_id] - Nuevo ID del entrenador del equipo.
+   *
+   * @returns {Promise<Object>} - Un objeto con información sobre la operación realizada.
+   *  - success: Indica si la operación fue exitosa (true) o no (false).
+   *  - message: Mensaje de confirmación o error.
+   *  - data: Datos del equipo actualizados (solo si success es true).
+   *  - error_type: Tipo de error (solo si success es false).
+   *  - error_message: Mensaje de error detallado (solo si success es false).
+   *
+   * @throws {Error} - Lanza un error si el estadio o entrenador especificados no existen.
+   */
   async updateTeamById({_id, objUpdate}) {
     try {
       await this.conexion.connect();
@@ -121,6 +165,20 @@ export class Equipo extends Connect {
     }
   }
 
+  /**
+   * Elimina un equipo de la base de datos por su ID.
+   *
+   * @param {Object} params - Parámetros necesarios para eliminar un equipo.
+   * @param {string} params._id - ID del equipo a eliminar.
+   *
+   * @returns {Promise<Object>} - Un objeto con información sobre la operación realizada.
+   *  - success: Indica si la operación fue exitosa (true) o no (false).
+   *  - message: Mensaje de confirmación o error.
+   *  - error_type: Tipo de error (solo si success es false).
+   *  - error_message: Mensaje de error detallado (solo si success es false).
+   *
+   * @throws {Error} - Lanza un error si el equipo especificado no existe.
+   */
   async deleteTeamById({_id}) {
     try {
       await this.conexion.connect()
