@@ -121,7 +121,7 @@ export class Equipo extends Connect {
     try {
       await this.conexion.connect();
 
-      const atributosPermitidos = ["nombre", "ciudad", "estado_id", "entrenador_id"]
+      const atributosPermitidos = ["nombre", "ciudad", "estadio_id", "entrenador_id"]
 
       for (let key of Object.keys(objUpdate)) {
         if (!atributosPermitidos.includes(key)) {
