@@ -5,6 +5,39 @@
 - Camilo Esteban Concha Torres
 - Samuel Enrique Suarez Estupiñan
 
+## Configuracion del archivo `.env`
+
+Crea un archivo llamado `.env` en la raíz de tu proyecto y agrega las siguientes variables de entorno:
+
+```javascript
+MONGODB_HOST=mongodb://
+MONGODB_USER=Samuel
+MONGODB_PASS=3334
+MONGODB_PORT=44256
+MONGODB_CLUSTER=monorail.proxy.rlwy.net
+MONGODB_DBNAME=LigaBetPlay
+```
+
+## Instalacion de las dependencias necesarias
+
+ Nos aseguramos de instalar el paquete `mongodb` ejecutando:
+
+```bash
+npm install mongodb
+```
+
+## Ejecucion del proyecto
+
+Para ejecutar el proyecto, nos aseguramos de que el archivo `.env` esté configurado correctamente y luego ejecutamos el siguiente comando:
+
+```bash
+node --env-file .env main.js
+o simplemente:
+npm run dev
+```
+
+
+
 ## 1. Gestion de Equipos
 
 **getAllTeams():** Obtiene todos los equipos.
@@ -94,4 +127,46 @@ let obj = new Partido();
 console.log(await obj.deleteMatchById({_id: "669c86364d847a241493fb97"}))
 ```
 
+## 7. Gestión de Entrenadores
+
+**getAllTrainers():** Obtiene todos los entrenadores.
+
+```javascript
+let obj = new Entrenador();
+console.log(await obj.getAllTrainers());
+```
+
+**addTrainer(params):** Registra un nuevo entrenador. 
+- ***Parametros obligatorios:*** nombre, email, telefono, experiencia
+- El telefono debe iniciar por su respectivo prefijo. Ejemplo: "**+57**123213211"
+
+```javascript
+let obj = new Entrenador();
+console.log(await obj.addTrainer({
+  nombre: "Mariana Traslaviña",
+  email: "mariana.traslavina@example.com",
+  telefono: "+573244195352",
+  experiencia: "10 años de experiencia como entrenador de clubes de alto rendimiento"
+}))
+```
+
+**updateTrainerById(params):** Actualiza un entrenador por su ID.
+
+- ***Parametros obligatorios:*** _id, objUpdate
+- ***Parametros opcionales:*** objUpdate.nombre, objUpdate.email, objUpdate.telefono, objUpdate.experiencia .
+- El telefono debe iniciar por su respectivo prefijo. Ejemplo: "**+57**123213211"
+
+```javascript
+let obj = new Entrenador();
+console.log(await obj.updateTrainerById({_id: "6699bbfa0a398139ea789103", objUpdate: {email: "miguel.yolver@proton.me"}}))
+```
+
+**deleteTrainerById(params):** Elimina un entrenador por su ID.
+
+- ***Parametros obligatorios:*** _id
+
+```javascript
+let obj = new Entrenador();
+console.log(await obj.deleteTrainerById({_id: "669d54aaebd4389e51fd3c5d"}))
+```
 
