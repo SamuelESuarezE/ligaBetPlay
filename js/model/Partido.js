@@ -62,4 +62,23 @@ export class Partido extends Connect {
     await this.conexion.close();
     return resultUpdate;
   }
+  // ahora creamos la funcion para poder agregar tarjetas por faltas o acontecimientos dados en el partido
+  async addCard(matchId, card) {
+    await this.conexion.connect();
+    // verificamos que el partido exista
+    const objectId = new ObjectId(matchId.$oid);
+    const existingMatch = await this.collection.findOne({ _id: objectId });
+
+    if (!existingMatch) {
+      await this.conexion.close();
+      throw new Error("El partido no existe.");
+    }
+    // si existe mediante la funcion updateone y $push estariamos creando un nuevo array de objetos que tendra los datos de esa tarjeta, esto puede hacerse cuantas veces sea necesario
+    const cardUpdate = await this.collection.updateOne(
+      { _id: objectId },
+      { $push: { tarjetas: card } }
+    );
+    await this.conexion.close();
+    return cardUpdate;
+  }
 }
