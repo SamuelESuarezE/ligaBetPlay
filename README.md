@@ -143,3 +143,46 @@ console.log(await obj.addIncident(
   }
 ));
 ```
+
+
+
+## **6. Gestión de Noticias y Comunicados**
+
+**addAnnouncement(announcement):** Añade un nuevo comunicado.
+* ***Parámetros:*** Un objeto con las propiedades del comunicado
+
+```javascript
+let obj = new Comunicado();
+console.log(await obj.addAnnouncement({
+  titulo: "Nueva Noticia",
+  contenido: "Contenido de la nueva noticia.",
+  fecha_publicacion: "2024-07-20",
+  destinatarios: "Aficionados"
+}));
+```
+
+**updateAnnouncement(id, updatedAnnouncement):** Actualiza un comunicado existente.
+* ***Parámetros:*** 
+  - id: Un objeto con la propiedad $oid que contiene el ID del comunicado
+  - updatedAnnouncement: Un objeto con las propiedades actualizadas del comunicado
+
+```javascript
+let obj = new Comunicado();
+console.log(await obj.updateAnnouncement(
+  { $oid: "669d6f842c3ccefddace270a" },
+  {
+    titulo: "Actualización de Noticia",
+    contenido: "Contenido actualizado de la noticia.",
+    fecha_publicacion: "2024-07-21",
+    destinatarios: "Equipos"
+  }
+));
+```
+
+**deleteAnnouncement(id):** Elimina un comunicado existente.
+* ***Parámetros:*** Un objeto con la propiedad $oid que contiene el ID del comunicado
+
+```javascript
+let obj = new Comunicado();
+console.log(await obj.deleteAnnouncement({ $oid: "669d6f842c3ccefddace270a" }));
+```
