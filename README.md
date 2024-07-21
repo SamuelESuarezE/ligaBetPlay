@@ -88,3 +88,58 @@ console.log(await obj.updatePlayer(
 let obj = new Jugador();
 console.log(await obj.deletePlayer({ $oid: "669bed533bc60a7605bbde1c" }));
 ```
+
+
+
+## **4. Registro de Resultados**
+
+**addMatchResult(matchId, result):** Actualiza el resultado de un partido.
+* ***Parámetros:*** 
+  - matchId: Un objeto con la propiedad $oid que contiene el ID del partido
+  - result: Un objeto con el resultado del partido
+
+```javascript
+let obj = new Partido();
+console.log(await obj.addMatchResult(
+  { $oid: "669a56da56ebba845724f318" },
+  {
+    goles_local: 0,
+    goles_visitante: 0,
+    resultado_final: "empate"
+  }
+));
+```
+
+**addCard(matchId, card):** Añade una tarjeta a un partido.
+* ***Parámetros:*** 
+  - matchId: Un objeto con la propiedad $oid que contiene el ID del partido
+  - card: Un objeto con los detalles de la tarjeta
+
+```javascript
+let obj = new Partido();
+console.log(await obj.addCard(
+  { $oid: "669a56da56ebba845724f319" },
+  {
+    equipo: "local",
+    jugador_id: { $oid: "669a4c6056ebba845724f2f5" },
+    color: "roja",
+    minuto: 80
+  }
+));
+```
+
+**addIncident(matchId, incident):** Añade un incidente a un partido.
+* ***Parámetros:*** 
+  - matchId: Un objeto con la propiedad $oid que contiene el ID del partido
+  - incident: Un objeto con los detalles del incidente
+
+```javascript
+let obj = new Partido();
+console.log(await obj.addIncident(
+  { $oid: "669a56da56ebba845724f319" },
+  {
+    descripcion: "Lesión de jugador",
+    minuto: 60
+  }
+));
+```

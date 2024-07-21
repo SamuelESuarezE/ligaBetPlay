@@ -96,7 +96,7 @@ let obj;
 
 
 
-  //caso de uso 2. Gestión de Jugadores
+  //caso de uso 2. Gestión de Jugadores ///////////////////////////////////////////////////////////////////////////////////////////////////////
   //Actor: Administrador de la Liga, Equipo Técnico
   //Descripción: Permite registrar, editar y eliminar jugadores de los equipos.
 
@@ -173,6 +173,88 @@ let obj;
   }
   // y aca finalmente podemos descomentar las funciones dependiendo de cual requiera usar el administrador o el equipo tecnico y usar: npm run dev en la consola:
 
-  // testAddPlayer();
-  // testUpdatePlayer();
-  // testDeletePlayer();
+  // testAddPlayer(); // agregar un jugador
+  // testUpdatePlayer(); // actualizar datos del jugador
+  // testDeletePlayer(); // eliminar un jugador
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+  
+  // Caso de uso 4. Registro de Resultados /////////////////////////////////////////////////////////////////////////////////////////
+  // Actor: Árbitro, Administrador de la Liga
+  // Descripción: Permite registrar los resultados de los partidos.
+
+
+  // creamos la funcion para que el arbitro o administrador puedan realizar la correcta actualizacion o agregacion de resultados a un partido
+  async function testAddMatchResult() {
+    const partidoObj = new Partido();
+    try {
+      const partidoId = { $oid: "669a56da56ebba845724f318" }; // importante que el id exista sino saldra error
+      // datos requeridos para la actualizacion:
+      const nuevoResultado = {
+        goles_local: 0,
+        goles_visitante: 0,
+        resultado_final: "empate" // aca solo se permiten estos datos: victoria_local, victoria_visitante, empate, por definir, cancelado (si no se pone tal cual saldra error de documento)
+      };
+      // y agregamos los resultados :
+      const resultado = await partidoObj.addMatchResult(partidoId, nuevoResultado);
+      console.log(resultado);
+    } catch (error) {
+      console.error("Error al agregar resultado del partido:", error.message);
+    } finally {
+      partidoObj.destructor();
+    }
+  }
+  // creamos la funcion para poder agregar tarjetas en un partido
+  async function testAddCard() {
+    const partidoObj = new Partido();
+    try {
+      // datos necesarios para la agregacion
+      const partidoId = { $oid: "669a56da56ebba845724f319" }; // verificamos que el id exista correctamente
+      const nuevaTarjeta = {
+        equipo: "local",
+        jugador_id: { $oid: "669a4c6056ebba845724f2f5" },// que el id sea correcto
+        color: "roja",
+        minuto: 80
+      };
+      // finalmente agregamos la nueva tarjeta
+      const resultado = await partidoObj.addCard(partidoId, nuevaTarjeta);
+      console.log(resultado);
+    } catch (error) {
+      console.error("Error al agregar tarjeta al partido:", error.message);
+    } finally {
+      partidoObj.destructor();
+    }
+  }
+    // creamos la funcion para poder agregar un nuevo incidente
+    async function testAddIncident() {
+      const partidoObj = new Partido();
+      try {
+        const partidoId = { $oid: "669a56da56ebba845724f319" }; // que el id exista correctamente
+        // datos necesarios para la inserccion
+        const nuevoIncidente = {
+          descripcion: "Lesión de jugador",
+          minuto: 60
+        };
+        //finalmente agregamos el nuevo incidente
+        const resultado = await partidoObj.addIncident(partidoId, nuevoIncidente);
+        console.log(resultado);
+      } catch (error) {
+        console.error("Error al agregar incidente al partido:", error.message);
+      } finally {
+        partidoObj.destructor();
+      }
+    }
+  // aca podemos descomentar las funciones que desea usar el arbitro o el administrador:
+
+  // testAddMatchResult(); //agregar/actualizar resultados de un partido
+  // testAddCard(); //agregar tarjetas a un partido
+  // testAddIncident() //agregar un incidente a un partido
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
