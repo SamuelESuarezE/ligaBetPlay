@@ -170,3 +170,38 @@ let obj = new Entrenador();
 console.log(await obj.deleteTrainerById({_id: "669d54aaebd4389e51fd3c5d"}))
 ```
 
+## 9. Gestión de Estadios
+
+**getAllStadiums():** Obtiene todos los estadios.
+
+```javascript
+let obj = new Estadio();
+console.log(await obj.getAllStadiums());
+```
+
+**addStadium(params):** Registra un nuevo estadio. 
+- ***Parametros obligatorios:*** nombre, ubicacion, capacidad_maxima
+
+```javascript
+let obj = new Estadio();
+console.log(await obj.addStadium({nombre: "Estadio Ejemplo", ubicacion: "Bucaramanga", capacidad_maxima: 3000}))
+```
+
+**updateStadiumById(params):** Actualiza un estadio por su ID.
+
+- ***Parametros obligatorios:*** _id, objUpdate
+- ***Parametros opcionales:*** objUpdate.nombre, objUpdate.ubicacion, objUpdate.capacidad_maxima
+
+```javascript
+let obj = new Estadio();
+console.log(await obj.updateStadiumById({_id: "669e477a6ba569d757350185", objUpdate: {nombre: "Estadio nuevo"}}))
+```
+
+**deleteStadiumById(params):** Elimina un estadio por su ID.
+
+- ***Parametros obligatorios:*** _id
+
+```javascript
+let obj = new Estadio();
+console.log(await obj.deleteStadiumById({_id: "669e4a7b3dbcee19f8ff5a77"}))
+
