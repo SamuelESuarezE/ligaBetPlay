@@ -63,7 +63,8 @@ obj.destructor();
 obj = new Estadio();
 // * CASO DE USO 9: Gestión de Estadios
 // console.log(await obj.getAllStadiums());
-console.log(await obj.addStadium({nombre: "Estadio La Loquera", ubicacion: "Cuadrapicha", capacidad_maxima: 100}))
+// console.log(await obj.addStadium({nombre: "Estadio La Loquera", ubicacion: "Cuadrapicha", capacidad_maxima: 100}))
+console.log(await obj.updateStadiumById({_id: "669e477a6ba569d757350185", objUpdate: {nombre: "Estadio nuevo"}}))
 obj.destructor();
 
 // Tests Jugador

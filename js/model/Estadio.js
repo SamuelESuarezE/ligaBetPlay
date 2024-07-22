@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { Connect } from "../../helpers/db/Connect.js";
 
 export class Estadio extends Connect {
@@ -53,5 +54,43 @@ export class Estadio extends Connect {
             await this.conexion.close();
         }
 
+    }
+
+    async updateStadiumById({_id, objUpdate}) {
+        try {
+            await this.conexion.connect()
+
+            const stadiumExists = await this.collection.findOne({_id: new ObjectId(_id)})
+            if (!stadiumExists) {
+                throw new Error("El estadio especificado no existe: " + _id)
+            }
+            const atributosPermitidos = ["nombre", "ubicacion", "capacidad_maxima"]
+
+            for (let [key, value] of Object.entries(objUpdate)) {
+                if (!atributosPermitidos.includes(key)) {
+                    throw new Error("Atributo no permitido: " + key)
+                }
+
+                if (key == "capacidad_maxima" && value < 0) {
+                    throw new Error("La capacidad máxima no puede ser negativa: " + value)
+                }
+            }
+
+            await this.collection.updateOne({ _id: new ObjectId(_id) }, {$set: objUpdate})
+
+            return {
+                success: true,
+                message: 'Estadio actualizado correctamente',
+                data: objUpdate,
+            }
+        } catch (error) {
+            return {
+                success: false,
+                error_type: error.name || "Error",
+                error_message: error.message || "Ha ocurrido un error desconocido",
+            };
+        } finally {
+            await this.conexion.close();
+        }
     }
 }
