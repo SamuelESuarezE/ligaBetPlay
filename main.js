@@ -337,3 +337,73 @@ let obj;
   // testUpdateAnnouncement(); // actualizar un comunicado
   // testDeleteAnnouncement(); // eliminar un comunicado
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
+
+
+
+
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
+  // Caso de uso 8. Gestión de Árbitros
+  // Actor: Administrador de la Liga
+  // Descripción: Permite registrar, editar y eliminar árbitros para los partidos.
+
+  // comenzamos creando la funcion en la cual ingresaremos los datos para crear un nuevo arbitro
+ async function testAddReferee() {
+    const arbitroObj = new Arbitro();
+    try {
+        // estos son los datos requeridos por la liga para la base de datos:
+      const nuevoArbitro = {
+        nombre: "Ricardo Pérez",
+        email: "ricardo.perez@example.com", // este email es unico y no debe ser usado de nuevo
+        telefono: "+573020334455",
+        experiencia: "7 años en torneos regionales"
+      };
+      // si todo es correcto procedemos a crear el nuevo arbitro
+      const resultado = await arbitroObj.addReferee(nuevoArbitro);
+      console.log(resultado);
+    } catch (error) {
+      console.error("Error al agregar árbitro:", error.message);
+    } finally {
+      arbitroObj.destructor();
+    }
+  }
+  
+  // luego tenemos la funcion que le permitira al administrador actualizar los datos de un arbirtro
+  async function testUpdateReferee() {
+    const arbitroObj = new Arbitro();
+    try {
+      const arbitroId = { $oid: "669eb787120e5a68b8874366" }; // este id es muy importante, si no existe no podremos actualizar de ninguna otra forma
+      const arbitroActualizado = {
+        experiencia: "6 años en ligas internacionales" // en este caso actualizamos la experiencia pero se puede actualizar cualquier dato
+      };
+      // si todo es correcto procederemos a actualizar los datos del arbitro
+      const resultado = await arbitroObj.updateReferee(arbitroId, arbitroActualizado);
+      console.log(resultado);
+    } catch (error) {
+      console.error("Error al actualizar árbitro:", error.message);
+    } finally {
+      arbitroObj.destructor();
+    }
+  }
+  
+  // por ultimo la funcion que le permitira al administrador poder eliminar un arbitro ya creado
+  async function testDeleteReferee() {
+    const arbitroObj = new Arbitro();
+    try {
+      const arbitroEliminarId = { $oid: "669eb787120e5a68b8874366" };  // este id es muy importante, si no existe no podremos eliminar ningun arbitro de ninguna otra forma
+        // si todo es correcto procedemos a eliminar el arbitro exitosamente:
+      const resultado = await arbitroObj.deleteReferee(arbitroEliminarId);
+      console.log(resultado);
+    } catch (error) {
+      console.error("Error al eliminar árbitro:", error.message);
+    } finally {
+      arbitroObj.destructor();
+    }
+  }
+  
+  // y aqui descomentamos las funciones que el aministrador desee utilizar:
+  
+  // testAddReferee(); // Agregar un árbitro
+  // testUpdateReferee(); // Actualizar un árbitro
+  // testDeleteReferee(); // Eliminar un árbitro
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
