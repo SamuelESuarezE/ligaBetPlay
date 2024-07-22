@@ -148,6 +148,14 @@ console.log(await obj.addIncident(
 
 ## **6. Gestión de Noticias y Comunicados**
 
+**getAllAnnouncements():** Obtiene todos los comunicados.
+
+```javascript
+let obj = new Comunicado();
+console.log(await obj.getAllAnnouncements());
+```
+
+
 **addAnnouncement(announcement):** Añade un nuevo comunicado.
 * ***Parámetros:*** Un objeto con las propiedades del comunicado
 
@@ -185,4 +193,54 @@ console.log(await obj.updateAnnouncement(
 ```javascript
 let obj = new Comunicado();
 console.log(await obj.deleteAnnouncement({ $oid: "669d6f842c3ccefddace270a" }));
+```
+
+
+
+## **8. Gestión de Árbitros**
+
+**getAllTrainers():** Obtiene todos los entrenadores.
+
+```javascript
+let obj = new Arbitro();
+console.log(await obj.getAllTrainers());
+```
+
+**addReferee(referee):** Añade un nuevo árbitro.
+
+- ***Parámetros:*** Un objeto con las propiedades del árbitro
+
+```javascript
+let obj = new Arbitro();
+console.log(await obj.addReferee({
+  nombre: "Ricardo Pérez",
+  email: "ricardo.perez@example.com",
+  telefono: "+573020334455",
+  experiencia: "7 años en torneos regionales"
+}));
+```
+
+**updateReferee(id, updatedReferee):** Actualiza un árbitro existente.
+
+- **Parámetros:**
+  - id: Un objeto con la propiedad $oid que contiene el ID del árbitro
+  - updatedReferee: Un objeto con las propiedades actualizadas del árbitro
+
+```javascript
+let obj = new Arbitro();
+console.log(await obj.updateReferee(
+  { $oid: "669eb787120e5a68b8874366" },
+  {
+    experiencia: "6 años en ligas internacionales"
+  }
+));
+```
+
+**deleteReferee(id):** Elimina un árbitro existente.
+
+- ***Parámetros:*** Un objeto con la propiedad $oid que contiene el ID del árbitro
+
+```javascript
+let obj = new Arbitro();
+console.log(await obj.deleteReferee({ $oid: "669eb787120e5a68b8874366" }));
 ```
