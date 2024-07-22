@@ -31,4 +31,27 @@ export class Estadio extends Connect {
             await this.conexion.close();
         }
     }
+
+    async addStadium({nombre, ubicacion, capacidad_maxima}) {
+        try {
+            await this.conexion.connect()
+
+            const newStadium = { nombre, ubicacion, capacidad_maxima }
+            await this.collection.insertOne(newStadium)
+            return {
+                success: true,
+                message: 'Estadio registrado correctamente',
+                data: newStadium,
+            }
+        } catch (error) {
+            return {
+                success: false,
+                error_type: error.name || "Error",
+                error_message: error.message || "Ha ocurrido un error desconocido",
+            };
+        } finally {
+            await this.conexion.close();
+        }
+
+    }
 }

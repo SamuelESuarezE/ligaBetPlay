@@ -42,7 +42,7 @@ obj = new Entrenador();
 // console.log(await obj.getAllTrainers());
 // console.log(await obj.addTrainer({nombre: "Mariana Traslaviña", email: "mariana.traslavina@example.com", telefono: "+573244195352", experiencia: "10 años de experiencia como entrenador de clubes de alto rendimiento"}))
 // console.log(await obj.updateTrainerById({_id: "6699bbfa0a398139ea789103", objUpdate: {email: "miguel.yolver@proton.me"}}))
-console.log(await obj.deleteTrainerById({_id: "669d54aaebd4389e51fd3c5d"}))
+// console.log(await obj.deleteTrainerById({_id: "669d54aaebd4389e51fd3c5d"}))
 obj.destructor();
 
 // Tests Entrenamiento
@@ -61,7 +61,9 @@ obj.destructor();
 
 // Tests Estadio
 obj = new Estadio();
+// * CASO DE USO 9: Gestión de Estadios
 // console.log(await obj.getAllStadiums());
+console.log(await obj.addStadium({nombre: "Estadio La Loquera", ubicacion: "Cuadrapicha", capacidad_maxima: 100}))
 obj.destructor();
 
 // Tests Jugador
