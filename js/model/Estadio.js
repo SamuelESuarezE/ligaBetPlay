@@ -60,10 +60,6 @@ export class Estadio extends Connect {
         try {
             await this.conexion.connect()
 
-            const stadiumExists = await this.collection.findOne({_id: new ObjectId(_id)})
-            if (!stadiumExists) {
-                throw new Error("El estadio especificado no existe: " + _id)
-            }
             const atributosPermitidos = ["nombre", "ubicacion", "capacidad_maxima"]
 
             for (let [key, value] of Object.entries(objUpdate)) {
@@ -76,7 +72,11 @@ export class Estadio extends Connect {
                 }
             }
 
-            await this.collection.updateOne({ _id: new ObjectId(_id) }, {$set: objUpdate})
+            const res = await this.collection.updateOne({ _id: new ObjectId(_id) }, {$set: objUpdate})
+
+            if (res.matchedCount === 0) {
+                throw new Error("El estadio especificado no existe: " + _id)
+            }
 
             return {
                 success: true,
@@ -91,6 +91,28 @@ export class Estadio extends Connect {
             };
         } finally {
             await this.conexion.close();
+        }
+    }
+
+    async deleteStadiumById({_id}) {
+        try {
+            await this.conexion.connect()
+            const res = await this.collection.deleteOne({ _id: new ObjectId(_id) })
+            if (res.deletedCount === 0) {
+                throw new Error("El estadio especificado no existe: " + _id)
+            }
+            return {
+                success: true,
+                message: 'Estadio eliminado correctamente',
+            }
+        } catch (error) {
+            return {
+                success: false,
+                error_type: error.name || "Error",
+                error_message: error.message || "Ha ocurrido un error desconocido",
+            }
+        } finally {
+            await this.conexion.close()
         }
     }
 }
