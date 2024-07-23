@@ -37,7 +37,6 @@ npm run dev
 ```
 
 
-
 ## 1. Gestion de Equipos
 
 **getAllTeams():** Obtiene todos los equipos.
@@ -81,6 +80,60 @@ console.log(await obj.updateTeamById({_id: "669a4add56ebba845724f2e4", objUpdate
 let obj = new Equipo();
 console.log(await obj.deleteTeamById({_id: "669bd3ac944f05d20e72ad6d"}))
 ```
+
+## **2. Gestión de Jugadores**
+
+**getAllPlayers():** Obtiene todos los jugadores.
+
+```javascript
+let obj = new Jugador();
+console.log(await obj.getAllPlayers());
+```
+
+**addPlayer(player):** Añade un nuevo jugador.
+* ***Parámetros:*** Un objeto con las propiedades del jugador
+
+```javascript
+let obj = new Jugador();
+console.log(await obj.addPlayer({
+  nombre: "Camilo Esteban",
+  edad: 24,
+  posición: "Defensa",
+  nacionalidad: "Colombiano",
+  equipo_id: {
+    $oid: "669a4add56ebba845724f2e0"
+  },
+  numero_camiseta: 15,
+  premios: []
+}));
+```
+
+**updatePlayer(id, updatedPlayer):** Actualiza un jugador por su ID.
+* ***Parámetros:*** 
+  - id: Un objeto con la propiedad $oid que contiene el ID del jugador
+  - updatedPlayer: Un objeto con las propiedades a actualizar
+
+```javascript
+let obj = new Jugador();
+console.log(await obj.updatePlayer(
+  { $oid: "669bed533bc60a7605bbde1c" },
+  {
+    edad: 26,
+    numero_camiseta: 13
+  }
+));
+```
+
+**deletePlayer(id):** Elimina un jugador por su ID.
+* ***Parámetros:*** Un objeto con la propiedad $oid que contiene el ID del jugador
+
+```javascript
+let obj = new Jugador();
+console.log(await obj.deletePlayer({ $oid: "669bed533bc60a7605bbde1c" }));
+```
+
+
+
 
 ## 3. Programacion de Partidos
 
@@ -127,6 +180,111 @@ let obj = new Partido();
 console.log(await obj.deleteMatchById({_id: "669c86364d847a241493fb97"}))
 ```
 
+
+## **4. Registro de Resultados**
+
+**addMatchResult(matchId, result):** Actualiza el resultado de un partido.
+* ***Parámetros:*** 
+  - matchId: Un objeto con la propiedad $oid que contiene el ID del partido
+  - result: Un objeto con el resultado del partido
+
+```javascript
+let obj = new Partido();
+console.log(await obj.addMatchResult(
+  { $oid: "669a56da56ebba845724f318" },
+  {
+    goles_local: 0,
+    goles_visitante: 0,
+    resultado_final: "empate"
+  }
+));
+```
+
+**addCard(matchId, card):** Añade una tarjeta a un partido.
+* ***Parámetros:*** 
+  - matchId: Un objeto con la propiedad $oid que contiene el ID del partido
+  - card: Un objeto con los detalles de la tarjeta
+
+```javascript
+let obj = new Partido();
+console.log(await obj.addCard(
+  { $oid: "669a56da56ebba845724f319" },
+  {
+    equipo: "local",
+    jugador_id: { $oid: "669a4c6056ebba845724f2f5" },
+    color: "roja",
+    minuto: 80
+  }
+));
+```
+
+**addIncident(matchId, incident):** Añade un incidente a un partido.
+* ***Parámetros:*** 
+  - matchId: Un objeto con la propiedad $oid que contiene el ID del partido
+  - incident: Un objeto con los detalles del incidente
+
+```javascript
+let obj = new Partido();
+console.log(await obj.addIncident(
+  { $oid: "669a56da56ebba845724f319" },
+  {
+    descripcion: "Lesión de jugador",
+    minuto: 60
+  }
+));
+```
+
+
+
+## **6. Gestión de Noticias y Comunicados**
+
+**getAllAnnouncements():** Obtiene todos los comunicados.
+
+```javascript
+let obj = new Comunicado();
+console.log(await obj.getAllAnnouncements());
+```
+
+
+**addAnnouncement(announcement):** Añade un nuevo comunicado.
+* ***Parámetros:*** Un objeto con las propiedades del comunicado
+
+```javascript
+let obj = new Comunicado();
+console.log(await obj.addAnnouncement({
+  titulo: "Nueva Noticia",
+  contenido: "Contenido de la nueva noticia.",
+  fecha_publicacion: "2024-07-20",
+  destinatarios: "Aficionados"
+}));
+```
+
+**updateAnnouncement(id, updatedAnnouncement):** Actualiza un comunicado existente.
+* ***Parámetros:*** 
+  - id: Un objeto con la propiedad $oid que contiene el ID del comunicado
+  - updatedAnnouncement: Un objeto con las propiedades actualizadas del comunicado
+
+```javascript
+let obj = new Comunicado();
+console.log(await obj.updateAnnouncement(
+  { $oid: "669d6f842c3ccefddace270a" },
+  {
+    titulo: "Actualización de Noticia",
+    contenido: "Contenido actualizado de la noticia.",
+    fecha_publicacion: "2024-07-21",
+    destinatarios: "Equipos"
+  }
+));
+```
+
+**deleteAnnouncement(id):** Elimina un comunicado existente.
+* ***Parámetros:*** Un objeto con la propiedad $oid que contiene el ID del comunicado
+
+```javascript
+let obj = new Comunicado();
+console.log(await obj.deleteAnnouncement({ $oid: "669d6f842c3ccefddace270a" }));
+```
+
 ## 7. Gestión de Entrenadores
 
 **getAllTrainers():** Obtiene todos los entrenadores.
@@ -170,6 +328,48 @@ let obj = new Entrenador();
 console.log(await obj.deleteTrainerById({_id: "669d54aaebd4389e51fd3c5d"}))
 ```
 
+
+## **8. Gestión de Árbitros**
+
+**addReferee(referee):** Añade un nuevo árbitro.
+
+- ***Parámetros:*** Un objeto con las propiedades del árbitro
+
+```javascript
+let obj = new Arbitro();
+console.log(await obj.addReferee({
+  nombre: "Ricardo Pérez",
+  email: "ricardo.perez@example.com",
+  telefono: "+573020334455",
+  experiencia: "7 años en torneos regionales"
+}));
+```
+
+**updateReferee(id, updatedReferee):** Actualiza un árbitro existente.
+
+- **Parámetros:**
+  - id: Un objeto con la propiedad $oid que contiene el ID del árbitro
+  - updatedReferee: Un objeto con las propiedades actualizadas del árbitro
+
+```javascript
+let obj = new Arbitro();
+console.log(await obj.updateReferee(
+  { $oid: "669eb787120e5a68b8874366" },
+  {
+    experiencia: "6 años en ligas internacionales"
+  }
+));
+```
+
+**deleteReferee(id):** Elimina un árbitro existente.
+
+- ***Parámetros:*** Un objeto con la propiedad $oid que contiene el ID del árbitro
+
+```javascript
+let obj = new Arbitro();
+console.log(await obj.deleteReferee({ $oid: "669eb787120e5a68b8874366" }));
+```
+
 ## 9. Gestión de Estadios
 
 **getAllStadiums():** Obtiene todos los estadios.
@@ -204,4 +404,8 @@ console.log(await obj.updateStadiumById({_id: "669e477a6ba569d757350185", objUpd
 ```javascript
 let obj = new Estadio();
 console.log(await obj.deleteStadiumById({_id: "669e4a7b3dbcee19f8ff5a77"}))
+
+let obj = new Arbitro();
+console.log(await obj.getAllTrainers());
+```
 
